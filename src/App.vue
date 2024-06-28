@@ -18,8 +18,8 @@ export default {
   },
   async mounted() {
     this.updateBiometryInfo(await BiometricAuth.checkBiometry())
-    await BiometricAuth.setBiometryType(['faceAuthentication', 'fingerprintAuthentication'])
-    await BiometricAuth.setBiometryIsEnrolled(true) 
+    //await BiometricAuth.setBiometryType(['faceAuthentication', 'fingerprintAuthentication'])
+    //await BiometricAuth.setBiometryIsEnrolled(true) 
 
     
 
