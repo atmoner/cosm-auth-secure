@@ -18,22 +18,26 @@ export default {
   },
   async mounted() {
     this.updateBiometryInfo(await BiometricAuth.checkBiometry())
-    //await BiometricAuth.setBiometryType(['faceAuthentication', 'fingerprintAuthentication'])
-    //await BiometricAuth.setBiometryIsEnrolled(true) 
+    await BiometricAuth.setBiometryType(['faceAuthentication', 'fingerprintAuthentication'])
+    await BiometricAuth.setBiometryIsEnrolled(true) 
 
     
 
-    console.log(await BiometricAuth.checkBiometry())
+    console.log('checkBiometry', await BiometricAuth.checkBiometry())
     this.debugBiometry = JSON.stringify(await BiometricAuth.checkBiometry())
+
+
     try {
       let appListener = await BiometricAuth.addResumeListener(this.updateBiometryInfo)
-      console.log(appListener)
+      console.log('appListener', appListener)
     } catch (error) {
+      console.error(error)
       if (error instanceof Error) {
         console.error(error.message)
       }
     }
 
+    //this.authenticateBiometryWithCustomPromptAndCustomErrors();
 
     try {
     await BiometricAuth.authenticate({
@@ -68,7 +72,7 @@ export default {
     },
     async checkBiometry() {
       try {
-        updateBiometryInfo(await BiometricAuth.checkBiometry())
+        this.updateBiometryInfo(await BiometricAuth.checkBiometry())
       } catch (error) {
         if (error instanceof Error) {
           console.error(error.message)
@@ -77,7 +81,7 @@ export default {
     },
     async authenticateBiometry() {
       try {
-        updateBiometryInfo(await BiometricAuth.authenticateBiometry())
+        this.updateBiometryInfo(await BiometricAuth.authenticateBiometry())
       } catch (error) {
         if (error instanceof Error) {
           console.error(error.message)
@@ -86,7 +90,7 @@ export default {
     },
     async authenticateBiometryWithCustomPrompt() {
       try {
-        updateBiometryInfo(
+        this.updateBiometryInfo(
           await BiometricAuth.authenticateBiometry({
             promptMessage: 'Authenticate with your biometry',
             cancelButtonText: 'Cancel',
@@ -100,7 +104,7 @@ export default {
     },
     async authenticateBiometryWithCustomPromptAndCustomErrors() {
       try {
-        updateBiometryInfo(
+        this.updateBiometryInfo(
           await BiometricAuth.authenticateBiometry({
             promptMessage: 'Authenticate with your biometry',
             cancelButtonText: 'Cancel',
@@ -140,6 +144,10 @@ export default {
     </div>
   </header>
   <pre>{{ debugBiometry }}</pre>
+  <br />
+  <button type="button" @click="authenticateBiometry()">authenticateBiometry</button><br />
+  <button type="button" @click="authenticateBiometry()">authenticateBiometryWithCustomPrompt</button><br />
+  <button type="button" @click="authenticateBiometry()">authenticateBiometryWithCustomPromptAndCustomErrors</button><br />
   <!-- <RouterView /> -->
 </template>
 
