@@ -1,3 +1,28 @@
+
+
+
+<template>
+  <header>
+    <img alt="Vue logo" class="logo" src="https://cdn-icons-png.freepik.com/512/1489/1489588.png" width="125" height="125" />
+
+    <div class="wrapper">
+ 
+
+      <nav>
+        <!-- <RouterLink to="/">Home</RouterLink> -->
+        <!-- <RouterLink to="/debug">Debug</RouterLink> -->
+      </nav>
+    </div>
+  </header>
+  <pre>{{ debugBiometry }}</pre>
+  <br />
+  <button type="button" @click="authenticateBiometry()">authenticateBiometry</button><br />
+  <button type="button" @click="authenticateBiometryWithCustomPrompt()">authenticateBiometryWithCustomPrompt</button><br />
+  <button type="button" @click="authenticateBiometryWithCustomPromptAndCustomErrors()">authenticateBiometryWithCustomPromptAndCustomErrors</button><br />
+  <button type="button" @click="testSimpleAuth()">testSimpleAuth</button><br />
+  <!-- <RouterView /> -->
+</template>
+
 <script>
 import { RouterLink, RouterView } from 'vue-router'
  
@@ -18,8 +43,8 @@ export default {
   },
   async mounted() {
     this.updateBiometryInfo(await BiometricAuth.checkBiometry())
-    await BiometricAuth.setBiometryType(['faceAuthentication', 'fingerprintAuthentication'])
-    await BiometricAuth.setBiometryIsEnrolled(true) 
+    //await BiometricAuth.setBiometryType(['faceAuthentication', 'fingerprintAuthentication'])
+    //await BiometricAuth.setBiometryIsEnrolled(true) 
 
     
 
@@ -39,26 +64,26 @@ export default {
 
     //this.authenticateBiometryWithCustomPromptAndCustomErrors();
 
-    try {
-    await BiometricAuth.authenticate({
-      reason: 'Please authenticate',
-      cancelTitle: 'Cancel',
-      allowDeviceCredential: true,
-      iosFallbackTitle: 'Use passcode',
-      androidTitle: 'Biometric login',
-      androidSubtitle: 'Log in using biometric authentication',
-      androidConfirmationRequired: false,
-      androidBiometryStrength: AndroidBiometryStrength.weak,
-    })
-  } catch (error) {
-    // error is always an instance of BiometryError.
-    if (error instanceof BiometryError) {
-      if (error.code !== BiometryErrorType.userCancel) {
-        // Display the error.
-        await showAlert(error.message)
+    /*try {
+      await BiometricAuth.authenticate({
+        reason: 'Please authenticate',
+        cancelTitle: 'Cancel',
+        allowDeviceCredential: true,
+        iosFallbackTitle: 'Use passcode',
+        androidTitle: 'Biometric login',
+        androidSubtitle: 'Log in using biometric authentication',
+        androidConfirmationRequired: false,
+        androidBiometryStrength: AndroidBiometryStrength.weak,
+      })
+    } catch (error) {
+      // error is always an instance of BiometryError.
+      if (error instanceof BiometryError) {
+        if (error.code !== BiometryErrorType.userCancel) {
+          // Display the error.
+          await showAlert(error.message)
+        }
       }
-    }
-  }
+    } */
   },
   methods: {
     updateBiometryInfo(info) {
@@ -129,31 +154,52 @@ export default {
         }
       }
     },
+    async testSimpleAuth () {
+
+    this.updateBiometryInfo(await BiometricAuth.checkBiometry())
+    //await BiometricAuth.setBiometryType(['faceAuthentication', 'fingerprintAuthentication'])
+    //await BiometricAuth.setBiometryIsEnrolled(true) 
+
+    
+
+    console.log('checkBiometry', await BiometricAuth.checkBiometry())
+    this.debugBiometry = JSON.stringify(await BiometricAuth.checkBiometry())
+    alert(this.debugBiometry)
+
+    try {
+      let appListener = await BiometricAuth.addResumeListener(this.updateBiometryInfo)
+      console.log('appListener', appListener)
+    } catch (error) {
+      console.error(error)
+      if (error instanceof Error) {
+        console.error(error.message)
+      }
+    }
+      try {
+        await BiometricAuth.authenticate({
+          reason: 'Please authenticate',
+          cancelTitle: 'Cancel',
+          allowDeviceCredential: true,
+          iosFallbackTitle: 'Use passcode',
+          androidTitle: 'Biometric login',
+          androidSubtitle: 'Log in using biometric authentication',
+          androidConfirmationRequired: false,
+          androidBiometryStrength: AndroidBiometryStrength.weak,
+        })
+      } catch (error) {
+        // error is always an instance of BiometryError.
+        if (error instanceof BiometryError) {
+          if (error.code !== BiometryErrorType.userCancel) {
+            // Display the error.
+            await alert(error.message);
+            // await showAlert(error.message)
+          }
+        }
+      }
   },
 }
+}
 </script>
-
-
-<template>
-  <header>
-    <img alt="Vue logo" class="logo" src="https://cdn-icons-png.freepik.com/512/1489/1489588.png" width="125" height="125" />
-
-    <div class="wrapper">
- 
-
-      <nav>
-        <!-- <RouterLink to="/">Home</RouterLink> -->
-        <!-- <RouterLink to="/debug">Debug</RouterLink> -->
-      </nav>
-    </div>
-  </header>
-  <pre>{{ debugBiometry }}</pre>
-  <br />
-  <button type="button" @click="authenticateBiometry()">authenticateBiometry</button><br />
-  <button type="button" @click="authenticateBiometry()">authenticateBiometryWithCustomPrompt</button><br />
-  <button type="button" @click="authenticateBiometry()">authenticateBiometryWithCustomPromptAndCustomErrors</button><br />
-  <!-- <RouterView /> -->
-</template>
 
 <style scoped>
 pre {
