@@ -82,7 +82,7 @@ export default {
     },
     async authenticateBiometry() {
       try {
-        this.updateBiometryInfo(await BiometricAuth.authenticateBiometry())
+        this.updateBiometryInfo(await BiometricAuth.authenticate())
       } catch (error) {
         if (error instanceof Error) {
           alert(error.message);
@@ -93,7 +93,7 @@ export default {
     async authenticateBiometryWithCustomPrompt() {
       try {
         this.updateBiometryInfo(
-          await BiometricAuth.authenticateBiometry({
+          await BiometricAuth.authenticate({
             promptMessage: 'Authenticate with your biometry',
             cancelButtonText: 'Cancel',
           })
@@ -108,7 +108,7 @@ export default {
     async authenticateBiometryWithCustomPromptAndCustomErrors() {
       try {
         this.updateBiometryInfo(
-          await BiometricAuth.authenticateBiometry({
+          await BiometricAuth.authenticate({
             promptMessage: 'Authenticate with your biometry',
             cancelButtonText: 'Cancel',
             errors: {
