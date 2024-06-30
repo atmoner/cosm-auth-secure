@@ -20,6 +20,7 @@
   <button type="button" @click="authenticateBiometryWithCustomPrompt()">authenticateBiometryWithCustomPrompt</button><br />
   <button type="button" @click="authenticateBiometryWithCustomPromptAndCustomErrors()">authenticateBiometryWithCustomPromptAndCustomErrors</button><br />
   <button type="button" @click="testSimpleAuth()">testSimpleAuth</button><br />
+  {{ biometricAvailable }} 
   <!-- <RouterView /> -->
 </template>
 
@@ -39,6 +40,7 @@ export default {
     return {
       debugBiometry: "",
       errorBiometry: "",
+      biometricAvailable: ""
     }
   },
   async mounted() {
@@ -90,9 +92,14 @@ export default {
       if (info.isAvailable) {
         console.log('Biometry is available')
         console.log(info.biometryType)
+        this.biometricAvailable = info.biometryType
         // Biometry is available, info.biometryType will tell you the primary type.
       } else {
         // Biometry is not available, info.reason and info.code will tell you why.
+        console.log('Biometry is not available')
+        this.biometricAvailable = info.reason + ' / ' + info.code
+        console.log(info.reason)
+        console.log(info.code)
       }
     },
     async checkBiometry() {
@@ -164,7 +171,7 @@ export default {
 
     console.log('checkBiometry', await BiometricAuth.checkBiometry())
     this.debugBiometry = JSON.stringify(await BiometricAuth.checkBiometry())
-    alert(this.debugBiometry)
+ 
 
     try {
       let appListener = await BiometricAuth.addResumeListener(this.updateBiometryInfo)
