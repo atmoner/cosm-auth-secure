@@ -75,6 +75,7 @@ export default {
         this.updateBiometryInfo(await BiometricAuth.checkBiometry())
       } catch (error) {
         if (error instanceof Error) {
+          alert(error.message);
           console.error(error.message)
         }
       }
@@ -84,6 +85,7 @@ export default {
         this.updateBiometryInfo(await BiometricAuth.authenticateBiometry())
       } catch (error) {
         if (error instanceof Error) {
+          alert(error.message);
           console.error(error.message)
         }
       }
@@ -98,6 +100,7 @@ export default {
         )
       } catch (error) {
         if (error instanceof Error) {
+          alert(error.message);
           console.error(error.message)
         }
       }
@@ -121,6 +124,7 @@ export default {
         )
       } catch (error) {
         if (error instanceof Error) {
+          alert(error.message);
           console.error(error.message)
         }
       }
